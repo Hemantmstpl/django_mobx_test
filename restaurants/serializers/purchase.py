@@ -22,10 +22,13 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        ticket = Tickets.objects.get(code=self.context["ticket_code"])
-        if self.check_ticket_availaility(ticket, validated_data["count"]):
-            validated_data['ticket'] = ticket
-            purchase = super(PurchaseSerializer, self).create(validated_data)
-            ticket.purchased_count += validated_data["count"]
-            ticket.save()
-            return purchase
+        try:
+            ticket = Tickets.objects.get(code=self.context["ticket_code"])
+            if self.check_ticket_availaility(ticket, validated_data["count"]):
+                validated_data['ticket'] = ticket
+                purchase = super(PurchaseSerializer, self).create(validated_data)
+                ticket.purchased_count += validated_data["count"]
+                ticket.save()
+                return purchase
+        except Tickets.DoesNotExist:
+            raise APIException("Invalid ticket code")

@@ -1,8 +1,9 @@
+import os
 import uuid
 
+from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from django.db import models
 
 from .base import BaseModel
 from .restaurant import Restaurants
@@ -34,6 +35,10 @@ class Tickets(BaseModel):
     @property
     def available_quantity(self):
         return self.max_purchase_count - self.purchased_count
+
+    @property
+    def purchase_url(self):
+        return '{}/api/tickets/{}/purchase/'.format(os.environ.get('HOST'), self.code)
 
     def clean(self):
         if self.max_purchase_count - self.purchased_count < 0:

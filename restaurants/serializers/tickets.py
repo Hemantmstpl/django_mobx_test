@@ -18,12 +18,14 @@ class CurrentRestaurantDefault:
 
 
 class TicketsListSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Tickets
         fields = (
             "name",
             "available_quantity",
-            "code"
+            "code",
+            "purchase_url"
         )
 
 
