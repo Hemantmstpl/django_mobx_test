@@ -3,6 +3,8 @@ import dj_database_url
 
 DEBUG = True
 
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
 ALLOWED_HOSTS = ["*"]
 
 # Database

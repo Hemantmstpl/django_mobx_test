@@ -1,20 +1,15 @@
 from .base import *
 import dj_database_url
 
-DEBUG = False
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', 5432),
-    }
-}
+DATABASES = {"default": dj_database_url.config("DATABASE_URL")}
