@@ -11,7 +11,7 @@ class BaseTicketsModelViewSet(BaseNestedModelViewSet):
         return Restaurants.objects.filter(owner=self.request.user)
 
 
-class TicketsModelViewSet(BaseTicketsModelViewSet):
+class RestaurantTicketsModelViewSet(BaseTicketsModelViewSet):
 
     parent_lookup = 'restaurant'
 

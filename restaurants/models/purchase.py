@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 from .base import BaseModel
 from .tickets import Tickets
@@ -18,6 +18,5 @@ class Purchase(BaseModel):
         help_text='Number of tickets to be purchased.',
     )
 
-
     def __str__(self):
-    	return self.email
+        return self.email

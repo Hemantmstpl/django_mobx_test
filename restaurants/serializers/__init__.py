@@ -1,3 +1,3 @@
 from .restaurants import RestaurantsSerializer
 from .tickets import TicketsListSerializer, TicketsCreateSerializer, TicketsUpdateSerializer
-from .purchase import PurchaseSerializer
+from .purchase import TicketsPurchaseSerializer, TicketsPurchaseListSerializer

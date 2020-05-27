@@ -1,5 +1,6 @@
 from django.db.models import QuerySet
 from rest_framework import viewsets
+
 from ..permissions import ValidParentPKPermission
 
 
@@ -12,7 +13,7 @@ class ActionSerializerMixin:
         try:
             return self.serializer_action_classes[self.action]
         except (KeyError, AttributeError):
-            return super(ActionSerializerMixin, self).get_serializer_class()
+            return super().get_serializer_class()
 
 
 class BaseViewSet(ActionSerializerMixin, viewsets.GenericViewSet):
@@ -60,4 +61,4 @@ class BaseNestedModelViewSet(BaseModelViewSet):
     def dispatch(self, request, *args, **kwargs):
         # get parent_pk from url arguments
         self.parent_pk = kwargs.get('%s_pk' % self.parent_lookup)
-        return super(BaseNestedModelViewSet, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
