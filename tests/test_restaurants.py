@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from restaurants.models import Restaurants
-from .factories import OwnerFactory, RestaurantFactory, TicketFactory, PurchaseFactory
+from .factories import OwnerFactory, RestaurantFactory
+
 
 class RestaurantTests(APITestCase):
 
@@ -12,7 +13,7 @@ class RestaurantTests(APITestCase):
 
     def test_restaurant_list(self):
         """
-        Ensure we can restaurants.
+        To get all the restaurants
         """
         self.setup()
         RestaurantFactory(owner=self.owner, name="restaurant1")
@@ -27,3 +28,4 @@ class RestaurantTests(APITestCase):
         endpoint = reverse('restaurants-choices')
         response = self.client.get(endpoint)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 3)
