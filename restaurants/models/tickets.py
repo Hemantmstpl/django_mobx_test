@@ -30,7 +30,7 @@ class Tickets(BaseModel):
     )
 
     def __str__(self):
-        return f'<Ticket: {self.name} - {self.restautant.name}>'
+        return self.name
 
     @property
     def available_quantity(self):
