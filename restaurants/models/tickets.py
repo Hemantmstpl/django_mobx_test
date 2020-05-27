@@ -36,10 +36,6 @@ class Tickets(BaseModel):
     def available_quantity(self):
         return self.max_purchase_count - self.purchased_count
 
-    @property
-    def purchase_url(self):
-        return '{}/api/tickets/{}/purchase/'.format(os.environ.get('HOST'), self.code)
-
     def clean(self):
         if self.max_purchase_count - self.purchased_count < 0:
             raise ValidationError(

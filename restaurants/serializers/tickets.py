@@ -25,7 +25,6 @@ class TicketsListSerializer(serializers.ModelSerializer):
             "name",
             "available_quantity",
             "code",
-            "purchase_url",
             "purchased_count"
         )
 
