@@ -18,7 +18,7 @@ class TicketsTests(APITestCase):
         """
         self.setup()
         self.assertEqual(Restaurants.objects.count(), 1)
-        endpoint = reverse('tickets-list', kwargs={'restaurant_pk': self.restaurant.pk})
+        endpoint = reverse('restaurant-tickets-list', kwargs={'restaurant_pk': self.restaurant.pk})
 
         response = self.client.get(endpoint)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -47,7 +47,7 @@ class TicketsTests(APITestCase):
         self.setup()
         self.assertEqual(Restaurants.objects.count(), 1)
         data = {"name":"ticket1", "max_purchase_count":10}
-        endpoint = reverse('tickets-list', kwargs={'restaurant_pk': self.restaurant.pk})
+        endpoint = reverse('restaurant-tickets-list', kwargs={'restaurant_pk': self.restaurant.pk})
 
         response = self.client.post(endpoint, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -65,7 +65,7 @@ class TicketsTests(APITestCase):
         self.setup()
         self.assertEqual(Restaurants.objects.count(), 1)
         ticket = TicketFactory(name="ticket1", restaurant=self.restaurant)
-        endpoint = reverse('tickets-detail', kwargs={'restaurant_pk': self.restaurant.pk, 'pk':ticket.pk})
+        endpoint = reverse('restaurant-tickets-detail', kwargs={'restaurant_pk': self.restaurant.pk, 'pk':ticket.pk})
 
         response = self.client.get(endpoint)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -82,7 +82,7 @@ class TicketsTests(APITestCase):
         self.setup()
         self.assertEqual(Restaurants.objects.count(), 1)
         ticket = TicketFactory(name="ticket1", restaurant=self.restaurant)
-        endpoint = reverse('tickets-detail', kwargs={'restaurant_pk': self.restaurant.pk, 'pk':ticket.pk})
+        endpoint = reverse('restaurant-tickets-detail', kwargs={'restaurant_pk': self.restaurant.pk, 'pk':ticket.pk})
 
         response = self.client.get(endpoint)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -99,7 +99,7 @@ class TicketsTests(APITestCase):
         self.setup()
         self.assertEqual(Restaurants.objects.count(), 1)
         ticket = TicketFactory(name="ticket1", restaurant=self.restaurant, max_purchase_count=10)
-        endpoint = reverse('tickets-detail', kwargs={'restaurant_pk': self.restaurant.pk, 'pk':ticket.pk})
+        endpoint = reverse('restaurant-tickets-detail', kwargs={'restaurant_pk': self.restaurant.pk, 'pk':ticket.pk})
 
         response = self.client.get(endpoint)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
