@@ -1,10 +1,9 @@
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import APIException
 from rest_framework.reverse import reverse
+from rest_framework.exceptions import APIException
 
 from ..models import Purchase, Tickets
-from .tickets import TicketsListSerializer
 
 
 class TicketsPurchaseSerializer(serializers.ModelSerializer):
@@ -14,7 +13,7 @@ class TicketsPurchaseSerializer(serializers.ModelSerializer):
         model = Purchase
         fields = '__all__'
 
-    def check_ticket_availaility(self, ticket, count):
+    def check_ticket_availability(self, ticket, count):
         if ticket.available_quantity == 0:
             raise APIException("No more tickets available")
         if not (ticket.available_quantity > 0 and ticket.available_quantity >= count):
@@ -36,15 +35,13 @@ class TicketsPurchaseSerializer(serializers.ModelSerializer):
         return instance.ticket.name
 
 
-class TicketsPurchaseListSerializer(TicketsListSerializer):
-    restaurant = serializers.SerializerMethodField(
-        method_name='get_restaurant_name')
-    detail_url = serializers.SerializerMethodField(
-        method_name='get_detail_url')
+class TicketsPurchaseListSerializer(serializers.ModelSerializer):
+    restaurant = serializers.SerializerMethodField(method_name='get_restaurant_name')
+    detail_url = serializers.SerializerMethodField()
 
-    class Meta(TicketsListSerializer.Meta):
-        fields = TicketsListSerializer.Meta.fields + (
-            'restaurant', 'detail_url')
+    class Meta:
+        model = Tickets
+        fields = '__all__'
 
     def get_restaurant_name(self, instance):
         return instance.restaurant.name
