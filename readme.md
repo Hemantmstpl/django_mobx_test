@@ -136,11 +136,12 @@ Using the managment command we create :
     URL : `/api/restaurants/<restaurantss_id>/tickets/<ticket_id>`
    Method : DELETE
    
-   **9. API to get all tickets for users to purchase** 
+**9. API to get all tickets for users to purchase** 
      URL : `/api/tickets/`  
      Method : GET
     Authentication not required    
-   **10. API to retrieve ticket for users to purchase**
+
+**10. API to retrieve ticket for users to purchase**
    URL : `/api/tickets/<ticket_code>/`  
      Method : GET
     Authentication not required  
