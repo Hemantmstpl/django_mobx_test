@@ -1,9 +1,11 @@
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.reverse import reverse
 from rest_framework.exceptions import APIException
+from rest_framework.reverse import reverse
 
 from ..models import Purchase, Tickets
+from .tickets import TicketsListSerializer
+from rest_framework.generics import get_object_or_404
 
 
 class TicketsPurchaseSerializer(serializers.ModelSerializer):
@@ -23,8 +25,8 @@ class TicketsPurchaseSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        ticket = self.context['view'].get_object()
-        if self.check_ticket_availaility(ticket, validated_data["count"]):
+        ticket = get_object_or_404(Tickets, code=self.context['view'].kwargs['pk'])
+        if self.check_ticket_availability(ticket, validated_data["count"]):
             validated_data['ticket'] = ticket
             purchase = super().create(validated_data)
             ticket.purchased_count += validated_data["count"]
@@ -35,13 +37,15 @@ class TicketsPurchaseSerializer(serializers.ModelSerializer):
         return instance.ticket.name
 
 
-class TicketsPurchaseListSerializer(serializers.ModelSerializer):
-    restaurant = serializers.SerializerMethodField(method_name='get_restaurant_name')
-    detail_url = serializers.SerializerMethodField()
+class TicketsPurchaseListSerializer(TicketsListSerializer):
+    restaurant = serializers.SerializerMethodField(
+        method_name='get_restaurant_name')
+    detail_url = serializers.SerializerMethodField(
+        method_name='get_detail_url')
 
-    class Meta:
-        model = Tickets
-        fields = '__all__'
+    class Meta(TicketsListSerializer.Meta):
+        fields = TicketsListSerializer.Meta.fields + (
+            'restaurant', 'detail_url')
 
     def get_restaurant_name(self, instance):
         return instance.restaurant.name
