@@ -1,5 +1,4 @@
 import math
-import random
 import threading
 
 from django.db import connection
@@ -8,30 +7,30 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from restaurants.models import Restaurants, Tickets
-
 from .factories import OwnerFactory, RestaurantFactory, TicketFactory
 
-# def testing_concurrency(times):
-#     def test_concurrently_decorator(test_func):
-#         def wrapper(*args, **kwargs):
-#             exceptions = []
-#             def call_test_func():
-#                 try:
-#                     test_func(*args, **kwargs)
-#                 except Exception as e:
-#                     exceptions.append(e)
-#                     raise
-#             threads = []
-#             for i in range(times):
-#                 threads.append(threading.Thread(target=call_test_func))
-#             for t in threads:
-#                 t.start()
-#             for t in threads:
-#                 t.join()
-#             if exceptions:
-#                 raise Exception('test_concurrently intercepted %s exceptions: %s' % (len(exceptions), exceptions))
-#         return wrapper
-#     return test_concurrently_decorator
+
+def testing_concurrency(times):
+    def test_concurrently_decorator(test_func):
+        def wrapper(*args, **kwargs):
+            exceptions = []
+            def call_test_func():
+                try:
+                    test_func(*args, **kwargs)
+                except Exception as e:
+                    exceptions.append(e)
+                    raise
+            threads = []
+            for i in range(times):
+                threads.append(threading.Thread(target=call_test_func))
+            for t in threads:
+                t.start()
+            for t in threads:
+                t.join()
+            if exceptions:
+                raise Exception('test_concurrently intercepted %s exceptions: %s' % (len(exceptions), exceptions))
+        return wrapper
+    return test_concurrently_decorator
 
 
 class PurchaseTicketViewSetTests(APITestCase):
@@ -42,13 +41,12 @@ class PurchaseTicketViewSetTests(APITestCase):
             restaurant = RestaurantFactory(owner=self.owner)
             for index2 in range(5):
                 ticket_name = f"Ticket_{index1}_{index2}"
-                max_count = random.choice(range(11, 21, 2))
                 TicketFactory(
-                    name=ticket_name, max_purchase_count=max_count, restaurant=restaurant)
+                    name=ticket_name, max_purchase_count=10, restaurant=restaurant)
 
     def test_list_purchase_tickets(self):
         """
-        To get all tickets of restaurant
+        To all tickets of restaurant
         """
         list_endpoint = reverse('tickets-list')
 
@@ -58,7 +56,7 @@ class PurchaseTicketViewSetTests(APITestCase):
 
     def test_retrive_purchase_ticket(self):
         """
-        To get all tickets of restaurant
+        To purchase tickets of restaurant
         """
         ticket = Tickets.objects.first()
         detail_endpoint = reverse('tickets-detail', args=(ticket.code,))
@@ -78,17 +76,15 @@ class PurchaseTicketViewSetTests(APITestCase):
 
     def test_purchase_ticket(self):
         ticket = Tickets.objects.first()
-        print(Tickets.objects.all(), "printing queryset")
-        count_value = math.ceil(ticket.available_quantity / 2)
         data = {
             "email": "test@yopmail.com",
-            "count": count_value
+            "count": "10"
         }
         purchase_endpoint = reverse('tickets-purchase', args=(ticket.code, ))
-        print("endpoint", purchase_endpoint)
 
-        # @testing_concurrency(4)
-        # def post_data():
-        response = self.client.post(purchase_endpoint, data, format='json')
-        print(response.json())
-        # post_data()?
+        @testing_concurrency(10)
+        def post_data():
+            response = self.client.post(purchase_endpoint, data, format='json')
+            print(response.json())
+            connection.close()
+        post_data()
