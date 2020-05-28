@@ -60,9 +60,11 @@ Using the managment command we create :
   Method : POST
   Returns the JWT token and refresh token, to be used for 
   authentication.
+
 **2. API to refresh the token:**
    URL : `/api/token/refresh/`
    Method : POST
+
 **3. API to get list of all restaurants**
    URL : `/api/restaurants/choices/`
    Method: GET
@@ -106,6 +108,7 @@ Using the managment command we create :
    "name" : <ticket_name>,
    "max_purchase_count": count 
   }
+  
 **6. API to retrieve a ticket of a restaurant**
    URL : `/api/restaurants/<restaurantss_id>/tickets/<ticket_id>`
    Method : GET
