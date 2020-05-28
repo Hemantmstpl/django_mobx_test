@@ -1,6 +1,5 @@
 from ..models import Restaurants, Tickets
-from ..serializers import (TicketsCreateSerializer, TicketsListSerializer,
-                           TicketsUpdateSerializer)
+from ..serializers import TicketsCreateSerializer, TicketsListSerializer
 from .base import BaseNestedModelViewSet
 
 # Create your views here.
@@ -18,7 +17,7 @@ class RestaurantTicketsModelViewSet(BaseTicketsModelViewSet):
     serializer_action_classes = {
         "list": TicketsListSerializer,
         "create": TicketsCreateSerializer,
-        "update": TicketsUpdateSerializer,
+        "update": TicketsCreateSerializer,
         "retrieve": TicketsListSerializer
     }
 

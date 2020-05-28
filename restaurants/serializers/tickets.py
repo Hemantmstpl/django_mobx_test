@@ -39,7 +39,3 @@ class TicketsCreateSerializer(serializers.ModelSerializer):
             "restaurant",
             "max_purchase_count"
         )
-
-
-class TicketsUpdateSerializer(TicketsCreateSerializer):
-    pass

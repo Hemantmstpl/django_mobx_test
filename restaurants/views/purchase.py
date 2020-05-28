@@ -14,16 +14,14 @@ from .base import BaseViewSet
 class PurchaseTicketViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
-    BaseViewSet
-):
-    permission_classes = [AllowAny]
+    BaseViewSet):
 
+    permission_classes = [AllowAny]
     serializer_action_classes = {
         "list": TicketsPurchaseListSerializer,
         "retrieve": TicketsPurchaseListSerializer,
         "purchase": TicketsPurchaseSerializer
     }
-
     queryset = Tickets.objects.annotate(available_count=F(
         'max_purchase_count') - F('purchased_count')).filter(available_count__gt=0)
 
